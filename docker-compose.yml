@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:5000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+#    command: >
+#      sh -c "until mysql -h db -uroot -proot -e 'SHOW DATABASES;'; do
+#            echo 'Waiting for the database...';
+#            sleep 1;
+#            done;
+#            python main.py"
+
+  db:
+    image: mysql:5.7.22
+    restart: always
+    environment:
+      MYSQL_DATABASE: main
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    command: --skip-grant-tables --skip-ssl
+    volumes:
+      - .dbdata:/var/lib/mysql
+    ports:
+      - "33067:3306"
+
+
+
+
